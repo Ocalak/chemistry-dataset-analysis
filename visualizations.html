@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Dataset Analysis - Interactive Visualizations</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+        <div class="container mx-auto px-4 py-12">
+            <h1 class="text-4xl font-bold mb-4">Interactive Visualizations</h1>
+            <p class="text-xl">Explore the chemistry dataset through interactive charts and graphs</p>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <a href="index.html" class="text-xl font-bold text-gray-800">Chemistry Analysis</a>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Home</a>
+                    <a href="visualizations.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Visualizations</a>
+                    <a href="https://bwttadxy.manus.space" class="text-gray-600 hover:text-blue-600 transition duration-300">Full Dashboard</a>
+                    <a href="https://github.com/username/chemistry-analysis" class="text-gray-600 hover:text-blue-600 transition duration-300">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Interactive Data Explorer</h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4">Filter Data</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="scoreFilter" class="block text-sm font-medium text-gray-700 mb-2">Score Range</label>
+                        <select id="scoreFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="all">All Scores</option>
+                            <option value="0-20">0-20 (Very Low)</option>
+                            <option value="21-40">21-40 (Low)</option>
+                            <option value="41-60">41-60 (Medium)</option>
+                            <option value="61-80">61-80 (High)</option>
+                            <option value="81-100">81-100 (Very High)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="timeFilter" class="block text-sm font-medium text-gray-700 mb-2">Time Spent</label>
+                        <select id="timeFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="all">All Times</option>
+                            <option value="quick">Quick (<5 min)</option>
+                            <option value="medium">Medium (5-30 min)</option>
+                            <option value="long">Long (>30 min)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="feedbackFilter" class="block text-sm font-medium text-gray-700 mb-2">Feedback</label>
+                        <select id="feedbackFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="all">All Submissions</option>
+                            <option value="with">With Feedback</option>
+                            <option value="without">Without Feedback</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button id="applyFilters" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                        Apply Filters
+                    </button>
+                    <button id="resetFilters" class="ml-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition duration-300">
+                        Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Score Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="filteredScoreChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Time vs Score</h3>
+                    <div class="chart-container">
+                        <canvas id="timeScoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Comparative Analysis</h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4">Compare Metrics</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="compareMetric1" class="block text-sm font-medium text-gray-700 mb-2">First Metric</label>
+                        <select id="compareMetric1" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="score">Average Score</option>
+                            <option value="time">Average Time</option>
+                            <option value="success">Success Rate</option>
+                            <option value="feedback">Feedback Rate</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="compareMetric2" class="block text-sm font-medium text-gray-700 mb-2">Second Metric</label>
+                        <select id="compareMetric2" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="time">Average Time</option>
+                            <option value="score">Average Score</option>
+                            <option value="success">Success Rate</option>
+                            <option value="feedback">Feedback Rate</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button id="compareMetrics" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                        Compare
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold mb-4">Comparison Results</h3>
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+                <div id="correlationResult" class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-700">Select metrics and click "Compare" to see correlation analysis.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Custom Visualizations</h2>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4">Create Your Own Chart</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="chartType" class="block text-sm font-medium text-gray-700 mb-2">Chart Type</label>
+                        <select id="chartType" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="scatter">Scatter Plot</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="xAxis" class="block text-sm font-medium text-gray-700 mb-2">X-Axis Data</label>
+                        <select id="xAxis" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="exercise">Exercise</option>
+                            <option value="student">Student</option>
+                            <option value="score">Score</option>
+                            <option value="time">Time</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="yAxis" class="block text-sm font-medium text-gray-700 mb-2">Y-Axis Data</label>
+                        <select id="yAxis" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="score">Score</option>
+                            <option value="time">Time</option>
+                            <option value="count">Count</option>
+                            <option value="success">Success Rate</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button id="generateChart" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
+                        Generate Chart
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold mb-4">Your Custom Chart</h3>
+                <div class="chart-container">
+                    <canvas id="customChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">Chemistry Dataset Analysis</h3>
+                    <p class="text-gray-400">Interactive analysis of student performance in chemistry exercises</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://bwttadxy.manus.space" class="text-white hover:text-blue-300 transition duration-300">
+                        Full Dashboard
+                    </a>
+                    <a href="https://github.com/username/chemistry-analysis" class="text-white hover:text-blue-300 transition duration-300">
+                        GitHub Repository
+                    </a>
+                    <a href="#" class="text-white hover:text-blue-300 transition duration-300">
+                        R Analysis
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>© 2025 Chemistry Dataset Analysis</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data for interactive visualizations
+        const sampleData = {
+            scores: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            scoreCounts: [245, 15, 12, 18, 22, 35, 42, 58, 75, 68, 410],
+            timeScoreData: [
+                {score: 95, time: 10, feedback: true},
+                {score: 85, time: 15, feedback: false},
+                {score: 75, time: 20, feedback: false},
+                {score: 65, time: 25, feedback: true},
+                {score: 55, time: 30, feedback: true},
+                {score: 45, time: 35, feedback: false},
+                {score: 35, time: 40, feedback: true},
+                {score: 25, time: 45, feedback: true},
+                {score: 15, time: 50, feedback: false},
+                {score: 5, time: 55, feedback: true},
+                {score: 100, time: 5, feedback: false},
+                {score: 90, time: 12, feedback: false},
+                {score: 80, time: 18, feedback: true},
+                {score: 70, time: 22, feedback: false},
+                {score: 60, time: 28, feedback: true},
+                {score: 50, time: 32, feedback: false},
+                {score: 40, time: 38, feedback: true},
+                {score: 30, time: 42, feedback: false},
+                {score: 20, time: 48, feedback: true},
+                {score: 10, time: 52, feedback: false},
+                {score: 100, time: 8, feedback: true},
+                {score: 90, time: 14, feedback: true},
+                {score: 80, time: 16, feedback: false},
+                {score: 70, time: 24, feedback: true},
+                {score: 60, time: 26, feedback: false},
+                {score: 50, time: 34, feedback: true},
+                {score: 40, time: 36, feedback: false},
+                {score: 30, time: 44, feedback: true},
+                {score: 20, time: 46, feedback: false},
+                {score: 10, time: 54, feedback: true}
+            ],
+            exercises: ['Ü1A1', 'Ü1A2', 'Ü1A3', 'Ü2A1', 'Ü2A2', 'Ü2A3', 'Ü3A1', 'Ü3A2', 'Ü4A1', 'Ü4A2', 'Ü4A3', 'Ü5A1', 'Ü5A2', 'Ü5A3'],
+            exerciseScores: [92.3, 90.1, 88.7, 85.2, 82.8, 22.3, 12.5, 45.8, 65.4, 18.7, 32.1, 28.6, 58.9, 35.4],
+            exerciseTimes: [5.78, 8.23, 12.45, 15.67, 18.34, 35.23, 42.15, 25.12, 22.45, 45.32, 28.45, 32.87, 18.92, 38.76],
+            students: ['1001', '1002', '1003', '1015', '1008', '1022', '1012', '1005', '1018', '1010'],
+            studentScores: [92.45, 89.78, 85.62, 82.31, 79.45, 76.89, 74.23, 71.67, 68.92, 65.34]
+        };
+
+        // Initialize charts
+        let filteredScoreChart, timeScoreChart, comparisonChart, customChart;
+
+        // Initialize filtered data
+        let filteredData = [...sampleData.timeScoreData];
+
+        // Function to initialize charts
+        function initCharts() {
+            // Filtered Score Chart
+            const filteredScoreCtx = document.getElementById('filteredScoreChart').getContext('2d');
+            filteredScoreChart = new Chart(filteredScoreCtx, {
+                type: 'bar',
+                data: {
+                    labels: sampleData.scores,
+                    datasets: [{
+                        label: 'Number of Submissions',
+                        data: sampleData.scoreCounts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Score Distribution'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Submissions'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Score'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Time vs Score Chart
+            const timeScoreCtx = document.getElementById('timeScoreChart').getContext('2d');
+            timeScoreChart = new Chart(timeScoreCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'With Feedback',
+                        data: filteredData.filter(d => d.feedback).map(d => ({x: d.time, y: d.score})),
+                        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Without Feedback',
+                        data: filteredData.filter(d => !d.feedback).map(d => ({x: d.time, y: d.score})),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time vs Score Relationship'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Score'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (minutes)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Comparison Chart (initially empty)
+            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            comparisonChart = new Chart(comparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Metric Comparison'
+                        }
+                    }
+                }
+            });
+
+            // Custom Chart (initially empty)
+            const customChartCtx = document.getElementById('customChart').getContext('2d');
+            customChart = new Chart(customChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Custom Chart'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Function to update filtered data
+        function updateFilteredData() {
+            const scoreFilter = document.getElementById('scoreFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            const feedbackFilter = document.getElementById('feedbackFilter').value;
+
+            // Reset to all data
+            filteredData = [...sampleData.timeScoreData];
+
+            // Apply score filter
+            if (scoreFilter !== 'all') {
+                const [min, max] = scoreFilter.split('-').map(Number);
+                filteredData = filteredData.filter(d => d.score >= min && d.score <= max);
+            }
+
+            // Apply time filter
+            if (timeFilter !== 'all') {
+                if (timeFilter === 'quick') {
+                    filteredData = filteredData.filter(d => d.time < 5);
+                } else if (timeFilter === 'medium') {
+                    filteredData = filteredData.filter(d => d.time >= 5 && d.time <= 30);
+                } else if (timeFilter === 'long') {
+                    filteredData = filteredData.filter(d => d.time > 30);
+                }
+            }
+
+            // Apply feedback filter
+            if (feedbackFilter !== 'all') {
+                filteredData = filteredData.filter(d => 
+                    (feedbackFilter === 'with' && d.feedback) || 
+                    (feedbackFilter === 'without' && !d.feedback)
+                );
+            }
+
+            // Update charts
+            updateFilteredCharts();
+        }
+
+        // Function to update filtered charts
+        function updateFilteredCharts() {
+            // Update score distribution
+            const scoreCounts = Array(11).fill(0); // 0-100 by 10s
+            filteredData.forEach(d => {
+                const index = Math.floor(d.score / 10);
+                scoreCounts[index]++;
+            });
+
+            filteredScoreChart.data.datasets[0].data = scoreCounts;
+            filteredScoreChart.update();
+
+            // Update time vs score chart
+            timeScoreChart.data.datasets[0].data = filteredData
+                .filter(d => d.feedback)
+                .map(d => ({x: d.time, y: d.score}));
+            
+            timeScoreChart.data.datasets[1].data = filteredData
+                .filter(d => !d.feedback)
+                .map(d => ({x: d.time, y: d.score}));
+            
+            timeScoreChart.update();
+        }
+
+        // Function to compare metrics
+        function compareMetrics() {
+            const metric1 = document.getElementById('compareMetric1').value;
+            const metric2 = document.getElementById('compareMetric2').value;
+            
+            let labels, data1, data2, title1, title2;
+            
+            // Set up data based on selected metrics
+            if (metric1 === 'score' || metric2 === 'score' || 
+                metric1 === 'time' || metric2 === 'time') {
+                // Use exercises as labels
+                labels = sampleData.exercises;
+                
+                if (metric1 === 'score') {
+                    data1 = sampleData.exerciseScores;
+                    title1 = 'Average Score';
+                } else if (metric1 === 'time') {
+                    data1 = sampleData.exerciseTimes;
+                    title1 = 'Average Time (min)';
+                } else if (metric1 === 'success') {
+                    data1 = sampleData.exerciseScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                    title1 = 'Success Rate (%)';
+                } else {
+                    data1 = Array(labels.length).fill(0).map(() => Math.random() * 100);
+                    title1 = 'Feedback Rate (%)';
+                }
+                
+                if (metric2 === 'score') {
+                    data2 = sampleData.exerciseScores;
+                    title2 = 'Average Score';
+                } else if (metric2 === 'time') {
+                    data2 = sampleData.exerciseTimes;
+                    title2 = 'Average Time (min)';
+                } else if (metric2 === 'success') {
+                    data2 = sampleData.exerciseScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                    title2 = 'Success Rate (%)';
+                } else {
+                    data2 = Array(labels.length).fill(0).map(() => Math.random() * 100);
+                    title2 = 'Feedback Rate (%)';
+                }
+            } else {
+                // Use students as labels
+                labels = sampleData.students;
+                
+                if (metric1 === 'success') {
+                    data1 = sampleData.studentScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                    title1 = 'Success Rate (%)';
+                } else {
+                    data1 = Array(labels.length).fill(0).map(() => Math.random() * 100);
+                    title1 = 'Feedback Rate (%)';
+                }
+                
+                if (metric2 === 'success') {
+                    data2 = sampleData.studentScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                    title2 = 'Success Rate (%)';
+                } else {
+                    data2 = Array(labels.length).fill(0).map(() => Math.random() * 100);
+                    title2 = 'Feedback Rate (%)';
+                }
+            }
+            
+            // Calculate correlation
+            const correlation = calculateCorrelation(data1, data2);
+            
+            // Update comparison chart
+            comparisonChart.data.labels = labels;
+            comparisonChart.data.datasets = [
+                {
+                    label: title1,
+                    data: data1,
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: title2,
+                    data: data2,
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y1'
+                }
+            ];
+            
+            comparisonChart.options.scales = {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: title1
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: title2
+                    }
+                }
+            };
+            
+            comparisonChart.options.plugins.title.text = `Comparison: ${title1} vs ${title2}`;
+            comparisonChart.update();
+            
+            // Update correlation result
+            const correlationResult = document.getElementById('correlationResult');
+            let correlationStrength = 'weak';
+            if (Math.abs(correlation) > 0.7) correlationStrength = 'strong';
+            else if (Math.abs(correlation) > 0.3) correlationStrength = 'moderate';
+            
+            correlationResult.innerHTML = `
+                <p class="text-lg font-medium">Correlation Analysis</p>
+                <p class="text-gray-700">The correlation between ${title1} and ${title2} is 
+                <span class="font-bold">${correlation.toFixed(4)}</span>, 
+                indicating a ${correlationStrength} ${correlation > 0 ? 'positive' : 'negative'} relationship.</p>
+                <p class="text-gray-600 mt-2 text-sm">
+                    ${getCorrelationInterpretation(correlation, title1, title2)}
+                </p>
+            `;
+        }
+        
+        // Function to calculate correlation
+        function calculateCorrelation(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumX2 += x[i] * x[i];
+                sumY2 += y[i] * y[i];
+            }
+            
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+            
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+        
+        // Function to get correlation interpretation
+        function getCorrelationInterpretation(correlation, metric1, metric2) {
+            const absCorr = Math.abs(correlation);
+            
+            if (absCorr < 0.1) {
+                return `There is virtually no relationship between ${metric1} and ${metric2}.`;
+            } else if (absCorr < 0.3) {
+                return `There is a weak relationship between ${metric1} and ${metric2}.`;
+            } else if (absCorr < 0.7) {
+                return `There is a moderate relationship between ${metric1} and ${metric2}.`;
+            } else {
+                return `There is a strong relationship between ${metric1} and ${metric2}.`;
+            }
+        }
+        
+        // Function to generate custom chart
+        function generateCustomChart() {
+            const chartType = document.getElementById('chartType').value;
+            const xAxis = document.getElementById('xAxis').value;
+            const yAxis = document.getElementById('yAxis').value;
+            
+            let labels, data, backgroundColor, borderColor;
+            
+            // Set up data based on selected axes
+            if (xAxis === 'exercise') {
+                labels = sampleData.exercises;
+                
+                if (yAxis === 'score') {
+                    data = sampleData.exerciseScores;
+                } else if (yAxis === 'time') {
+                    data = sampleData.exerciseTimes;
+                } else if (yAxis === 'count') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 100) + 10);
+                } else { // success
+                    data = sampleData.exerciseScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                }
+            } else if (xAxis === 'student') {
+                labels = sampleData.students;
+                
+                if (yAxis === 'score') {
+                    data = sampleData.studentScores;
+                } else if (yAxis === 'time') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 50) + 5);
+                } else if (yAxis === 'count') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 100) + 10);
+                } else { // success
+                    data = sampleData.studentScores.map(s => s >= 60 ? (s/100) * 100 : 0);
+                }
+            } else if (xAxis === 'score') {
+                labels = sampleData.scores;
+                
+                if (yAxis === 'count') {
+                    data = sampleData.scoreCounts;
+                } else if (yAxis === 'time') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 50) + 5);
+                } else { // success or other
+                    data = labels.map(s => s >= 60 ? 100 : 0);
+                }
+            } else { // time
+                labels = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60];
+                
+                if (yAxis === 'score') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 100));
+                } else if (yAxis === 'count') {
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 100) + 10);
+                } else { // success or other
+                    data = Array(labels.length).fill(0).map(() => Math.floor(Math.random() * 100));
+                }
+            }
+            
+            // Set up colors
+            if (chartType === 'pie') {
+                backgroundColor = [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(199, 199, 199, 0.8)',
+                    'rgba(83, 102, 255, 0.8)',
+                    'rgba(40, 159, 64, 0.8)',
+                    'rgba(210, 199, 199, 0.8)',
+                    'rgba(78, 52, 199, 0.8)',
+                    'rgba(225, 109, 64, 0.8)',
+                    'rgba(169, 169, 169, 0.8)',
+                    'rgba(113, 102, 205, 0.8)'
+                ];
+                borderColor = backgroundColor.map(color => color.replace('0.8', '1'));
+            } else {
+                backgroundColor = 'rgba(75, 192, 192, 0.8)';
+                borderColor = 'rgba(75, 192, 192, 1)';
+            }
+            
+            // Update custom chart
+            customChart.destroy(); // Destroy previous chart
+            
+            const customChartCtx = document.getElementById('customChart').getContext('2d');
+            customChart = new Chart(customChartCtx, {
+                type: chartType === 'scatter' ? 'scatter' : chartType,
+                data: {
+                    labels: chartType === 'scatter' ? null : labels,
+                    datasets: [{
+                        label: `${yAxis.charAt(0).toUpperCase() + yAxis.slice(1)} by ${xAxis.charAt(0).toUpperCase() + xAxis.slice(1)}`,
+                        data: chartType === 'scatter' ? 
+                            labels.map((l, i) => ({x: l, y: data[i]})) : 
+                            data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: `${yAxis.charAt(0).toUpperCase() + yAxis.slice(1)} by ${xAxis.charAt(0).toUpperCase() + xAxis.slice(1)}`
+                        }
+                    },
+                    scales: chartType === 'pie' ? {} : {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: yAxis.charAt(0).toUpperCase() + yAxis.slice(1)
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: xAxis.charAt(0).toUpperCase() + xAxis.slice(1)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            
+            // Filter buttons
+            document.getElementById('applyFilters').addEventListener('click', updateFilteredData);
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                document.getElementById('scoreFilter').value = 'all';
+                document.getElementById('timeFilter').value = 'all';
+                document.getElementById('feedbackFilter').value = 'all';
+                filteredData = [...sampleData.timeScoreData];
+                updateFilteredCharts();
+            });
+            
+            // Compare metrics button
+            document.getElementById('compareMetrics').addEventListener('click', compareMetrics);
+            
+            // Generate custom chart button
+            document.getElementById('generateChart').addEventListener('click', generateCustomChart);
+        });
+    </script>
+</body>
+</html>
