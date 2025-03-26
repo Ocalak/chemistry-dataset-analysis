@@ -16,16 +16,9 @@ The analysis explores a comprehensive chemistry dataset containing student answe
 
 ## Interactive Dashboard
 
-The analysis is available as an interactive dashboard at:
-[https://bwttadxy.manus.space](https://bwttadxy.manus.space)
-
 You can also view the GitHub Pages version of this analysis at:
-[https://chemistry-dataset-analysis.github.io](https://chemistry-dataset-analysis.github.io)
+[[https://chemistry-dataset-analysis.github.io](https://ocalak.github.io/chemistry-dataset-analysis/)]([https://chemistry-dataset-analysis.github.io](https://ocalak.github.io/chemistry-dataset-analysis/))
 
-## Repository
-
-This repository contains all the code and files needed to run the analysis:
-[https://github.com/chemistry-dataset-analysis/chemistry-dataset-analysis](https://github.com/chemistry-dataset-analysis/chemistry-dataset-analysis)
 
 ## Analysis Components
 
@@ -53,25 +46,6 @@ This repository contains all the code and files needed to run the analysis:
 - Comparison of performance with and without feedback
 - Statistical significance testing of feedback effects
 
-## Recommendations
-
-Based on the analysis, we recommend:
-
-1. **For Instructors**:
-   - Focus additional instructional resources on the most challenging topics
-   - Consider introducing intermediate exercises to bridge difficulty gaps
-   - Review time requirements for the most time-consuming exercises
-   - Implement more proactive feedback mechanisms
-
-2. **For Students**:
-   - Pay special attention to concepts covered in challenging exercises
-   - Focus on quality of engagement rather than quantity of time spent
-   - Seek feedback proactively, not just when struggling
-
-3. **For Curriculum Development**:
-   - Analyze characteristics of exercises with high success rates
-   - Consider breaking down complex exercises into smaller components
-   - Develop a more balanced distribution of exercise difficulty
 
 ## Repository Contents
 
@@ -82,22 +56,12 @@ Based on the analysis, we recommend:
 - `README.md`: This documentation file
 - `_config.yml`: GitHub Pages configuration
 
-## How to Use
-
-### Web Dashboard
-
-Visit [https://bwttadxy.manus.space](https://bwttadxy.manus.space) to explore the interactive dashboard.
-
-### GitHub Pages
-
-Visit [https://chemistry-dataset-analysis.github.io](https://chemistry-dataset-analysis.github.io) to view the GitHub Pages version.
-
-### R Analysis
+## How to Use - R Analysis
 
 To run the analysis locally:
 
 1. Clone this repository
-2. Place your `manus.csv` file in the repository directory
+2. Place your `dataset.csv` file in the repository directory
 3. Open `chemistry_analysis.Rmd` in RStudio
 4. Install required packages if prompted
 5. Click "Knit" to generate an interactive HTML report
@@ -108,12 +72,3 @@ To run the analysis locally:
 - **Data Analysis**: R, tidyverse, plotly, DT
 - **R Markdown**: For reproducible research document
 - **GitHub Pages**: For hosting the interactive web version
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Dataset provided by the chemistry department
-- Analysis conducted using open-source tools and libraries
